@@ -2,7 +2,7 @@
 
 namespace Ejercicio3;
 
-public static class Program
+public class Program
 {
     private static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -10,11 +10,16 @@ public static class Program
     private static readonly string[] Apellidos = { "Ramirez", "Perez", "Suarez" };
     private static readonly Random Random = new Random();
 
+    private static readonly string PathProyecto = HelperArchivos.VerPathDelProyecto();
+    private const string AtletismoArchivo = "Atletismo";
+    private const string VoleyArchivo = "Voley";
+    private const string FutbolArchivo = "Futbol";
+
     public static void Main(string[] args)
     {
         Console.WriteLine("Ingrese la cantidad de alumnos");
         var cantidadAlumnos = Convert.ToInt32(Console.ReadLine());
-        
+
         var alumnos = new List<Alumno>();
         List<Alumno> listaAtletismo;
         List<Alumno> listaVoley;
@@ -46,8 +51,13 @@ public static class Program
         listaVoley = alumnos.Where((x => x.Curso == Curso.Voley)).ToList();
 
         Logger.Debug("Se crearon exitosamente las listas de los cursos");
-        
+
         ImprimirLista(alumnos);
+
+        foreach (var alumno in listaAtletismo)
+        {
+            HelperArchivos.EscribirLinea(PathProyecto + "/" + AtletismoArchivo, alumno.Nombre);
+        }
     }
 
     public static void ImprimirLista(List<Alumno> lista)

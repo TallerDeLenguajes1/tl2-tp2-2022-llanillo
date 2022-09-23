@@ -7,6 +7,20 @@ public static class HelperArchivos
     private const string ExtensionCsv = ".csv";
     
     /*
+     * Devuelve el path del proyecto
+     */
+    public static string VerPathDelProyecto()
+    {
+        string directorioEnv = Environment.CurrentDirectory;
+        DirectoryInfo? pathProyecto = Directory.GetParent(directorioEnv)?.Parent;
+        
+        if (pathProyecto?.Parent != null)
+            return pathProyecto?.Parent.FullName ?? string.Empty;
+        
+        return string.Empty;
+    }
+    
+    /*
      * Retorna verdadero si la escritura fue exitosa
      */
     public static void EscribirLinea(string ruta, string? texto)
@@ -18,8 +32,8 @@ public static class HelperArchivos
         
         try
         {
-            using TextWriter streamWriter = File.AppendText(ruta);
-            streamWriter.WriteLine(SeparadorCsv + texto);
+            using TextWriter streamWriter = File.AppendText(ruta + ExtensionCsv);
+            streamWriter.WriteLine(texto + SeparadorCsv);
         }
         catch (Exception e)
         {
@@ -41,7 +55,7 @@ public static class HelperArchivos
 
         try
         {
-            using TextReader streamReader = new StreamReader(ruta);
+            using TextReader streamReader = new StreamReader(ruta + ExtensionCsv);
             var textoEnArchivo = streamReader.ReadToEnd();
             textoEnArchivo = textoEnArchivo.Replace(";", " ");
             Console.WriteLine(textoEnArchivo);
